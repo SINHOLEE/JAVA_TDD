@@ -1,4 +1,4 @@
-class Dollar extends Money{
+class DollarWithRemark extends Money{
 //	17. 이제 private로 선언하자.
 //	18. 무슨말인지는 모르겠지만. 67p에서는  
 //		만약 동치성 테스트가 동치성에 대한 코드가 정확히 작동한다는 것을 검증하는데 실패하게 된다면, 
@@ -6,7 +6,7 @@ class Dollar extends Money{
 //		아 즉 equal() 이라는 메소드에 문제가 있다면, times()에 대한 결과도 이상할 수 밖에 없게 된다는 위험에 노출된다.
 //		-> testMultiplication에서 TestFrancMuliplicaction 라는 함수를 만들자.
 	
-	Dollar(int amount, String currency){
+	DollarWithRemark(int amount, String currency){
 		super(amount, currency);
 	}
 //	4. time이 반환하는 타입을 Dollar로 선언한 뒤 일단 리턴값을 null로 한다. 

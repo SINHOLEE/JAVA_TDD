@@ -1,5 +1,4 @@
-// 23. 머니를 만들어 놓고 일단 달러를 기준으로 바꿔본다.
-abstract class Money {
+class Money implements Expression {
 	protected int amount;
 	protected String currency;
 	
@@ -7,26 +6,37 @@ abstract class Money {
 		this.amount = amount;
 		this.currency = currency;
 	}
-	
-	abstract Money times(int multiplier);
-	
+	Money times(int multiplier) {
+		return new Money(amount * multiplier, currency); 
+	}
+
 	String currency() {
 		return this.currency; 
 	}
 	
-	static Dollar dollar(int amount) {
-		return new Dollar(amount, "USD");
+	static Money dollar(int amount) {
+		return new Money(amount, "USD");
 	}
 	
-	static Franc franc(int amount) {
-		return new Franc(amount, "CHF");
+	static Money franc(int amount) {
+		return new Money(amount, "CHF");
 	}
 	
-//	28. Dollar에서 수정한 equals 메소드를 붙인다. 또한 Franc에 있는 equals 메소드도 동시에 지운다.
 	public boolean equals(Object object) { // public 의 쓰임새 1. 인스턴스에서 쓰고 싶은 메소드는 public 선언 한다.
 		Money money = (Money) object;
-//		31. amount가 같으면서 class가 같을때만 트루라고 반환하라.
-//		32. times 메소드 역시 money에 이식할 수 있을 것 같다. Dollar로 가서 times를 수정해 Money 클래스에 이식해보자.
-		return amount == money.amount && getClass().equals(money.getClass());
+		return amount == money.amount && currency.equals(money.currency);
+	}
+	public Money reduce(Bank bank, String to) {
+//		여기서 환전? 환율계산을 해야하지 않나 싶어요.//
+		int rate = bank.rate(currency, to);
+		return new Money(amount / rate, to);
+	}
+	
+	public String toString() {
+		return amount + " " + currency;
+	}
+//	public Money plus(Money addedAmount) {
+	public Expression plus(Money addedend) {
+		return new Sum(this, addedend);
 	}
 }
