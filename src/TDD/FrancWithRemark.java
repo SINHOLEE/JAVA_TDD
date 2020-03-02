@@ -9,7 +9,7 @@ class FrancWithRemark extends Money{
 		super(amount, currency);
 	}
 		
-	Money times(int multiplier) {
+	public Money times(int multiplier) {
 		return Money.franc(amount * multiplier); 
 	}
 }

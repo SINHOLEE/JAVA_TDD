@@ -3,10 +3,13 @@
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.hamcrest.core.IsInstanceOf;
 import org.junit.jupiter.api.Test;
 
 import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
+
+import sun.net.www.content.text.plain;
 
 class testMultiplication {
 
@@ -76,4 +79,46 @@ class testMultiplication {
 	public void testArrayEquals() {
 		assertArrayEquals(new Object[] {"abc"}, new Object[] {"abc"} );
 	}
+	
+	@Test
+	public void testMixedadition() {
+		Expression fiveDollars = Money.dollar(5);
+		Expression tenFrancs = Money.franc(10);
+		Bank bank = new Bank();
+		bank.addRate("CHF", "USD", 2);
+		Money result = bank.reduce(fiveDollars.plus(tenFrancs), "USD");
+		assertEquals(Money.dollar(10), result);
+	}
+	
+	@Test
+	public void testSumPlusMoney() {
+		Expression fivedollars = Money.dollar(5);
+		Expression tenFrancs = Money.franc(10);
+		Bank bank = new Bank();
+		bank.addRate("CHF", "USD", 2);
+		Expression sum= new Sum(fivedollars, tenFrancs).plus(new Sum(tenFrancs, fivedollars).plus(tenFrancs));
+//		sum 은 재귀적으로 돌아간다.
+//		환율의 역수는 아직 계산할 수 없다.
+		System.out.println(sum);
+		Money result= bank.reduce(sum, "USD");
+		assertEquals(Money.dollar(25), result);
+		
+	}
+	@Test
+	public void testSumTimesMoney() {
+		Expression fivedollars = Money.dollar(5);
+		Expression tenFrancs = Money.franc(10);
+		Bank bank = new Bank();
+		bank.addRate("CHF", "USD", 2);
+		Expression sum= new Sum(fivedollars, tenFrancs).times(2);
+		Money result= bank.reduce(sum, "USD");
+		assertEquals(Money.dollar(20), result);
+	}
+	
+//	@Test
+//	public void testPlusSameCurrencyReturnsMoney() {
+//		Expression sum= Money.dollar(1).plus(Money.dollar(1));
+//		assertTrue(sum instanceof Money);
+////		안되는 녀석... 그래서 버린다!		
+//	}
 }

@@ -6,13 +6,6 @@ class Money implements Expression {
 		this.amount = amount;
 		this.currency = currency;
 	}
-	Money times(int multiplier) {
-		return new Money(amount * multiplier, currency); 
-	}
-
-	String currency() {
-		return this.currency; 
-	}
 	
 	static Money dollar(int amount) {
 		return new Money(amount, "USD");
@@ -26,17 +19,28 @@ class Money implements Expression {
 		Money money = (Money) object;
 		return amount == money.amount && currency.equals(money.currency);
 	}
+	
 	public Money reduce(Bank bank, String to) {
 //		여기서 환전? 환율계산을 해야하지 않나 싶어요.//
 		int rate = bank.rate(currency, to);
 		return new Money(amount / rate, to);
 	}
 	
+//	public Money plus(Money addedAmount) {
+	public Expression plus(Expression addend) {
+		return new Sum(this, addend);
+	}
+	
+	public Expression times(int multiplier) {
+		return new Money(amount * multiplier, currency); 
+	}
+	
 	public String toString() {
 		return amount + " " + currency;
 	}
-//	public Money plus(Money addedAmount) {
-	public Expression plus(Money addedend) {
-		return new Sum(this, addedend);
+
+	String currency() {
+		return this.currency; 
 	}
+
 }

@@ -10,7 +10,7 @@ class DollarWithRemark extends Money{
 		super(amount, currency);
 	}
 //	4. time이 반환하는 타입을 Dollar로 선언한 뒤 일단 리턴값을 null로 한다. 
-	Money times(int multiplier) {
+	public Money times(int multiplier) {
 //		amount *= multiplier;
 //		5. junit을 실행해보면 nullpointerror가 떳다. 
 //		return null;
